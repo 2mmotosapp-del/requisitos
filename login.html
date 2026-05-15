@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wyarp Sistemas · Acesso do Consultor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body class="auth-body">
+  <div class="auth-canvas">
+    <!-- Lado esquerdo: marca -->
+    <aside class="auth-brand">
+      <div class="auth-brand-grid"></div>
+      <div class="auth-brand-glow"></div>
+
+      <div class="auth-brand-inner">
+        <div class="brand-mark">
+          <svg viewBox="0 0 64 64" class="brand-mark-svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="bgrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#5fa8ff"/>
+                <stop offset="100%" stop-color="#1c5d7a"/>
+              </linearGradient>
+            </defs>
+            <path d="M8 18 L20 46 L32 22 L44 46 L56 18" stroke="url(#bgrad)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="56" cy="18" r="3" fill="#ff8a3d"/>
+          </svg>
+          <div class="brand-mark-text">
+            <span class="brand-name">Wyarp</span>
+            <span class="brand-sub">sistemas</span>
+          </div>
+        </div>
+
+        <h1 class="auth-headline">
+          Levantamento <em>inteligente</em><br>
+          de requisitos.
+        </h1>
+        <p class="auth-tagline">
+          Plataforma de consultoria para mapear a realidade operacional de empresas e transformá-la em diagnóstico acionável.
+        </p>
+
+        <ul class="auth-features">
+          <li><span class="dot"></span> Questionário guiado em 18 etapas</li>
+          <li><span class="dot"></span> Diagnóstico automático com tags</li>
+          <li><span class="dot"></span> Dashboard consolidado de leads</li>
+          <li><span class="dot"></span> Exportação PDF profissional</li>
+        </ul>
+
+        <div class="auth-footnote">
+          <span>© 2026 Wyarp Sistemas</span>
+          <span class="dot-sep">·</span>
+          <span>Goiânia · Brasil</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Lado direito: formulário -->
+    <main class="auth-form-area">
+      <div class="auth-form-card">
+        <span class="auth-eyebrow">/ acesso restrito</span>
+        <h2 class="auth-title">Entre na plataforma</h2>
+        <p class="auth-desc">Use suas credenciais de consultor Wyarp.</p>
+
+        <form id="loginForm" class="auth-form" autocomplete="on">
+          <label class="field">
+            <span class="field-label">E-mail corporativo</span>
+            <input type="email" id="email" name="email" required placeholder="seunome@wyarp.com.br" autocomplete="username">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Senha</span>
+            <input type="password" id="password" name="password" required placeholder="••••••••" autocomplete="current-password">
+          </label>
+
+          <label class="checkbox-line">
+            <input type="checkbox" id="remember" checked>
+            <span>Manter sessão neste dispositivo</span>
+          </label>
+
+          <button type="submit" class="btn-solid" id="btnLogin">
+            <span>Entrar</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+
+          <div id="loginError" class="auth-error" hidden></div>
+        </form>
+
+        <div class="auth-divider"><span>credenciais de teste</span></div>
+        <div class="auth-demo">
+          <code>admin@wyarp.com.br</code>
+          <code>wyarp2026</code>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="./assets/api.js"></script>
+  <script src="./assets/auth.js"></script>
+  <script>
+    // Se já estiver logado, redireciona para o dashboard
+    if (WyarpAuth.isLogged()) {
+      window.location.href = './dashboard.html';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('btnLogin');
+      const err = document.getElementById('loginError');
+
+      err.hidden = true;
+      btn.disabled = true;
+      btn.querySelector('span').textContent = 'Verificando...';
+
+      try {
+        await WyarpAuth.login(email, password);
+        window.location.href = './dashboard.html';
+      } catch (ex) {
+        err.hidden = false;
+        err.textContent = ex.message || 'Credenciais inválidas.';
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Entrar';
+      }
+    });
+  </script>
+</body>
+</html>

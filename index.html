@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wyarp Sistemas · Novo Levantamento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body class="app-body">
+  <!-- Topbar -->
+  <header class="topbar">
+    <a href="./dashboard.html" class="topbar-brand">
+      <svg viewBox="0 0 64 64" class="brand-mark-svg sm" aria-hidden="true">
+        <defs>
+          <linearGradient id="bgrad2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5fa8ff"/>
+            <stop offset="100%" stop-color="#1c5d7a"/>
+          </linearGradient>
+        </defs>
+        <path d="M8 18 L20 46 L32 22 L44 46 L56 18" stroke="url(#bgrad2)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="56" cy="18" r="3" fill="#ff8a3d"/>
+      </svg>
+      <span><strong>Wyarp</strong>sistemas</span>
+    </a>
+
+    <nav class="topbar-nav">
+      <a href="./dashboard.html" class="topbar-link">Dashboard</a>
+      <a href="./index.html" class="topbar-link active">Levantamento</a>
+    </nav>
+
+    <div class="topbar-user">
+      <span class="topbar-user-name" id="topbarUserName">—</span>
+      <button class="topbar-logout" id="btnLogout" title="Sair">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Conteúdo -->
+  <main class="app-main">
+    <!-- Header da seção -->
+    <section class="page-head">
+      <div>
+        <span class="eyebrow">/ novo registro</span>
+        <h1 class="page-title">Levantamento de requisitos</h1>
+        <p class="page-sub">Mapeie a operação da empresa em 18 etapas guiadas. Os dados são salvos automaticamente no Baserow ao finalizar.</p>
+      </div>
+      <div class="page-head-meta">
+        <div class="meta-pill">
+          <span class="meta-pill-key">salvamento</span>
+          <span class="meta-pill-val"><span class="pulse"></span> automático</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Barra de progresso -->
+    <section class="progress-wrap">
+      <div class="progress-track">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+      <div class="progress-meta">
+        <span id="stepIndicator">Etapa 1 de 18</span>
+        <span id="percentIndicator">0%</span>
+      </div>
+    </section>
+
+    <!-- Container do questionário -->
+    <section id="questionContainer"></section>
+    <section id="resumoContainer" class="hide"></section>
+  </main>
+
+  <script src="./assets/api.js"></script>
+  <script src="./assets/auth.js"></script>
+  <script src="./assets/questionnaire.js"></script>
+  <script>
+    // Guarda de rota
+    if (!WyarpAuth.isLogged()) {
+      window.location.href = './login.html';
+    } else {
+      const user = WyarpAuth.currentUser();
+      document.getElementById('topbarUserName').textContent = user.name || user.email;
+      document.getElementById('btnLogout').addEventListener('click', () => {
+        WyarpAuth.logout();
+        window.location.href = './login.html';
+      });
+      // Inicializa o questionário com o consultor logado
+      Questionnaire.init({
+        consultorLogado: user.name || user.email
+      });
+    }
+  </script>
+</body>
+</html>

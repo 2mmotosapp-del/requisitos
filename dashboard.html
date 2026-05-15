@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wyarp Sistemas · Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body class="app-body">
+  <header class="topbar">
+    <a href="./dashboard.html" class="topbar-brand">
+      <svg viewBox="0 0 64 64" class="brand-mark-svg sm" aria-hidden="true">
+        <defs>
+          <linearGradient id="bgrad3" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5fa8ff"/>
+            <stop offset="100%" stop-color="#1c5d7a"/>
+          </linearGradient>
+        </defs>
+        <path d="M8 18 L20 46 L32 22 L44 46 L56 18" stroke="url(#bgrad3)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="56" cy="18" r="3" fill="#ff8a3d"/>
+      </svg>
+      <span><strong>Wyarp</strong>sistemas</span>
+    </a>
+
+    <nav class="topbar-nav">
+      <a href="./dashboard.html" class="topbar-link active">Dashboard</a>
+      <a href="./index.html" class="topbar-link">Levantamento</a>
+    </nav>
+
+    <div class="topbar-user">
+      <span class="topbar-user-name" id="topbarUserName">—</span>
+      <button class="topbar-logout" id="btnLogout" title="Sair">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section class="page-head">
+      <div>
+        <span class="eyebrow">/ visão geral</span>
+        <h1 class="page-title">Dashboard de levantamentos</h1>
+        <p class="page-sub">Acompanhe os diagnósticos registrados, filtre por segmento e exporte relatórios.</p>
+      </div>
+      <div class="page-head-actions">
+        <a href="./index.html" class="btn-solid">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span>Novo levantamento</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- KPIs -->
+    <section class="kpi-grid">
+      <article class="kpi-card kpi-primary">
+        <span class="kpi-label">Total de leads</span>
+        <strong class="kpi-value" id="kpiTotal">—</strong>
+        <span class="kpi-delta" id="kpiTotalDelta">carregando...</span>
+      </article>
+      <article class="kpi-card">
+        <span class="kpi-label">Este mês</span>
+        <strong class="kpi-value" id="kpiMes">—</strong>
+        <span class="kpi-delta">registros em maio</span>
+      </article>
+      <article class="kpi-card">
+        <span class="kpi-label">Sem sistema</span>
+        <strong class="kpi-value" id="kpiSemSistema">—</strong>
+        <span class="kpi-delta">oportunidades quentes</span>
+      </article>
+      <article class="kpi-card">
+        <span class="kpi-label">Alto faturamento</span>
+        <strong class="kpi-value" id="kpiAltoFat">—</strong>
+        <span class="kpi-delta">acima de R$ 1mi/mês</span>
+      </article>
+    </section>
+
+    <!-- Filtros -->
+    <section class="filters">
+      <div class="search-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="filterSearch" placeholder="Buscar por empresa, responsável ou e-mail...">
+      </div>
+      <select id="filterSegmento" class="filter-select">
+        <option value="">Todos os segmentos</option>
+      </select>
+      <select id="filterPossuiSistema" class="filter-select">
+        <option value="">Possui sistema (todos)</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+      <button class="btn-ghost" id="btnReload">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg>
+        <span>Atualizar</span>
+      </button>
+    </section>
+
+    <!-- Tabela -->
+    <section class="table-card">
+      <div class="table-card-head">
+        <h3>Levantamentos registrados</h3>
+        <span class="table-count" id="tableCount">0 registros</span>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Responsável</th>
+              <th>Segmento</th>
+              <th>Faturamento/mês</th>
+              <th>Sistema</th>
+              <th>Data</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="7" class="table-empty">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de detalhe -->
+  <div class="modal-backdrop hide" id="modalBackdrop">
+    <div class="modal-panel">
+      <header class="modal-head">
+        <div>
+          <span class="eyebrow">/ detalhe do lead</span>
+          <h2 id="modalTitle">—</h2>
+        </div>
+        <button class="modal-close" id="modalClose" aria-label="Fechar">×</button>
+      </header>
+      <div class="modal-body" id="modalBody"></div>
+      <footer class="modal-foot">
+        <button class="btn-ghost" id="modalCloseBtn">Fechar</button>
+        <button class="btn-solid" id="modalPdf">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <span>Exportar PDF</span>
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+  <script src="./assets/api.js"></script>
+  <script src="./assets/auth.js"></script>
+  <script src="./assets/pdf.js"></script>
+  <script src="./assets/dashboard.js"></script>
+  <script>
+    if (!WyarpAuth.isLogged()) {
+      window.location.href = './login.html';
+    } else {
+      const user = WyarpAuth.currentUser();
+      document.getElementById('topbarUserName').textContent = user.name || user.email;
+      document.getElementById('btnLogout').addEventListener('click', () => {
+        WyarpAuth.logout();
+        window.location.href = './login.html';
+      });
+      Dashboard.init();
+    }
+  </script>
+</body>
+</html>
